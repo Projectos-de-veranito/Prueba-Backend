@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { SupabaseModule } from './supabase/supabase.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
@@ -8,6 +10,8 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 
 
 @Module({
+  controllers: [AppController],
+  providers: [AppService],
   imports: [SupabaseModule, AuthModule, UsersModule, ContactsModule, MessagesModule, NotificationsModule],
 })
 export class AppModule {}
