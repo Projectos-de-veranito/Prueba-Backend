@@ -1,19 +1,41 @@
-import { Controller, Post, Get, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
 import { MessagesService } from './messages.service';
+import { CreateMessageDto } from './dto/create-message.dto';
+import { UpdateMessageDto } from './dto/update-message.dto';
 
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Post()
-  async sendMessage(
-    @Body() body: { sender_id: string; receiver_id: string; content: string; media_url?: string },
-  ) {
-    return this.messagesService.sendMessage(body.sender_id, body.receiver_id, body.content, body.media_url);
+  async sendMessage(@Body() createMessageDto: CreateMessageDto) {
+    return this.messagesService.sendMessage(createMessageDto);
   }
 
-  @Get(':userId')
-  async getMessages(@Param('userId') userId: string) {
-    return this.messagesService.getMessages(userId);
+  @Get(':chat_id')
+  async getMessages(
+    @Param('chat_id') chatId: string,
+    @Query('limit') limit = 20,
+    @Query('offset') offset = 0
+  ) {
+    return this.messagesService.getMessages(chatId, Number(limit), Number(offset));
+  }
+
+  @Patch('read')
+  async markAsRead(@Body('messageIds') messageIds: string[]) {
+    return this.messagesService.markAsRead(messageIds);
+  }
+
+  @Patch(':id')
+  async updateMessage(
+    @Param('id') messageId: string,
+    @Body() updateMessageDto: UpdateMessageDto
+  ) {
+    return this.messagesService.updateMessage(messageId, updateMessageDto);
+  }
+
+  @Delete(':id')
+  async deleteMessage(@Param('id') messageId: string) {
+    return this.messagesService.deleteMessage(messageId);
   }
 }
