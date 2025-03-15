@@ -14,4 +14,3 @@ import { ChatsModule } from './modules/chats/chats.module';
   imports: [SupabaseModule, AuthModule, UsersModule, ContactsModule, MessagesModule, ChatsModule],
 })
 export class AppModule {}
-

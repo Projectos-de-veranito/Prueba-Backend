@@ -14,28 +14,43 @@ export class MessagesService {
   async sendMessage(createMessageDto: CreateMessageDto) {
     const { chat_id, sender_id, content, media_url } = createMessageDto;
 
-    const { data, error } = await this.supabase
-      .from('messages')
-      .insert([{ chat_id, sender_id, content, media_url }])
-      .select()
-      .single();
+    try {
+      const { data, error } = await this.supabase
+        .from('messages')
+        .insert([{ chat_id, sender_id, content, media_url }])
+        .select()
+        .single();
 
-    if (error) throw error;
-    return data;
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error al insertar el mensaje:', error.message);
+      throw new Error(`Error al enviar el mensaje: ${error.message}`);
+    }
   }
 
   async getMessages(chatId: string, limit: number, offset: number) {
-    const { data, error } = await this.supabase
-      .from('messages')
-      .select('*')
-      .eq('chat_id', chatId)
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1);
+    try {
+      const { data, error } = await this.supabase
+        .from('messages')
+        .select('*')
+        .eq('chat_id', chatId)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1);
 
-    if (error) throw error;
-    return data;
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error al obtener los mensajes:', error.message);
+      throw new Error(`Error al obtener los mensajes: ${error.message}`);
+    }
   }
-
   async markAsRead(messageIds: string[]) {
     const { data, error } = await this.supabase
       .from('messages')

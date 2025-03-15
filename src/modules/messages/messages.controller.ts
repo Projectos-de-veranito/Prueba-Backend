@@ -5,11 +5,25 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 
 @Controller('messages')
 export class MessagesController {
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(private readonly messagesService: MessagesService) { }
 
-  @Post()
-  async sendMessage(@Body() createMessageDto: CreateMessageDto) {
-    return this.messagesService.sendMessage(createMessageDto);
+  @Post(':chat_id/messages')
+  async sendMessage(
+    @Param('chat_id') chatId: string,
+    @Body() createMessageDto: CreateMessageDto
+  ) {
+    try {
+      const message = await this.messagesService.sendMessage({
+        chat_id: chatId,
+        sender_id: createMessageDto.sender_id,
+        content: createMessageDto.content,
+        media_url: createMessageDto.media_url,
+      });
+      return message;
+    } catch (error) {
+      console.error('Error al enviar el mensaje:', error.message);
+      throw new Error(`Error al enviar el mensaje: ${error.message}`);
+    }
   }
 
   @Get(':chat_id')
@@ -18,7 +32,13 @@ export class MessagesController {
     @Query('limit') limit = 20,
     @Query('offset') offset = 0
   ) {
-    return this.messagesService.getMessages(chatId, Number(limit), Number(offset));
+    try {
+      const messages = await this.messagesService.getMessages(chatId, Number(limit), Number(offset));
+      return messages;
+    } catch (error) {
+      console.error('Error al obtener los mensajes:', error.message);
+      throw new Error(`Error al obtener los mensajes: ${error.message}`);
+    }
   }
 
   @Patch('read')

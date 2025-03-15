@@ -1,6 +1,5 @@
   import { Injectable } from '@nestjs/common';
   import { SupabaseService } from '../../supabase/supabase.service';
-  import * as bcrypt from 'bcrypt';
   import { UpdateUserDto } from './dto/update-user.dto';
   import { CreateUserDto } from './dto/create-user.dto';
 
@@ -13,12 +12,11 @@
     }
 
     async createUser(createUserDto: CreateUserDto) {
-      const { email, username, password, avatar_url } = createUserDto;
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const { email, username, avatar_url } = createUserDto;
     
       const { data, error } = await this.supabase
         .from('users')
-        .insert([{ email, password: hashedPassword, username, avatar_url }])
+        .insert([{ email, username, avatar_url }])
         .select()
         .single();
     
@@ -70,10 +68,7 @@
     
 
     async updateUser(id: string, updateData: UpdateUserDto) {
-      if (updateData.password) {
-        updateData.password = await bcrypt.hash(updateData.password, 10);
-      }
-
+      
       const { data, error } = await this.supabase
         .from('users')
         .update(updateData)
