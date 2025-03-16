@@ -63,11 +63,10 @@ export class MessagesService {
   }
 
   async updateMessage(id: string, updateMessageDto: UpdateMessageDto) {
-    const { content } = updateMessageDto;
 
     const { data, error } = await this.supabase
       .from('messages')
-      .update({ content })
+      .update({ updateMessageDto })
       .eq('id', id)
       .select()
       .single();
