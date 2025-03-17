@@ -66,7 +66,7 @@ export class MessagesService {
 
     const { data, error } = await this.supabase
       .from('messages')
-      .update({ updateMessageDto })
+      .update({ ...updateMessageDto, edited_at: new Date().toISOString() })
       .eq('id', id)
       .select()
       .single();

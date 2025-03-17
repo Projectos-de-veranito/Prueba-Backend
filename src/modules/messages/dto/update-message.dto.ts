@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class UpdateMessageDto {
   @IsOptional()
@@ -8,4 +8,8 @@ export class UpdateMessageDto {
   @IsOptional()
   @IsString()
   media_url?: string;
+
+  @IsOptional()
+  @IsDateString()
+  edited_at?: string;
 }
