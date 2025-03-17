@@ -1,37 +1,159 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://flowchat-rdri.netlify.app/assets/logo-F1-gNZkr.webp" width="200" alt="FlowChat Logo" />
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<p align="center">A modern messaging platform built with <a href="http://nodejs.org" target="_blank">Node.js</a> and NestJS framework for scalable, real-time communication.</p>
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+<p align="center">
+  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+  <a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+  <a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+FlowChat is a messaging application backend built using the [NestJS](https://github.com/nestjs/nest) framework. It provides a robust API for real-time messaging, user management, contact management, and file uploads.
 
-## Project setup
+## Project Structure
+
+The backend follows a modular architecture organized by domain:
+
+```
+src/
+├── modules/
+│   ├── auth/            # Authentication and authorization
+│   │   ├── auth.controller.ts
+│   │   ├── auth.module.ts
+│   │   └── auth.service.ts
+│   ├── chatEvents/      # Real-time chat event handling
+│   │   ├── dto/
+│   │   ├── chatEvents.controller.ts
+│   │   ├── chatEvents.module.ts
+│   │   └── chatEvents.service.ts
+│   ├── chats/           # Chat room and conversation management
+│   │   ├── dto/
+│   │   ├── chats.controller.ts
+│   │   ├── chats.module.ts
+│   │   └── chats.service.ts
+│   ├── contacts/        # User contacts management
+│   │   ├── dto/
+│   │   ├── contacts.controller.ts
+│   │   ├── contacts.module.ts
+│   │   └── contacts.service.ts
+│   ├── messages/        # Message handling and storage
+│   │   ├── dto/
+│   │   ├── messages.controller.ts
+│   │   ├── messages.module.ts
+│   │   └── messages.service.ts
+│   ├── uploads/         # File upload functionality
+│   │   ├── dto/
+│   │   ├── uploads.controller.ts
+│   │   ├── uploads.module.ts
+│   │   └── uploads.service.ts
+│   ├── users/           # User management
+│   │   ├── dto/
+│   │   ├── users.controller.ts
+│   │   ├── users.module.ts
+│   │   └── users.service.ts
+│   └── supabase/        # Database integration with Supabase
+│       ├── supabase.module.ts
+│       └── supabase.service.ts
+```
+
+## Key Features
+
+### 1. Real-time Messaging
+
+The `messages.service.ts` implements real-time messaging using Supabase:
+
+```typescript
+async sendMessage(createMessageDto: CreateMessageDto) {
+    const { chat_id, sender_id, content, media_url } = createMessageDto;
+
+    try {
+      const { data, error } = await this.supabase
+        .from('messages')
+        .insert([{ chat_id, sender_id, content, media_url }])
+        .select()
+        .single();
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error al insertar el mensaje:', error.message);
+      throw new Error(`Error al enviar el mensaje: ${error.message}`);
+    }
+}
+```
+
+### 2. User Authentication
+
+The `auth.service.ts` handles secure user authentication:
+
+```typescript
+async signIn(email: string, password: string) {
+    const { data, error } = await this.supabaseService.getClient().auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) throw new Error(error.message);
+    return data;
+}
+```
+
+### 3. Chat Creation
+
+The `chats.service.ts` provides functionality for creating conversations:
+
+```typescript
+async createChat(createChatDto: CreateChatDto) {
+    const { is_group, name } = createChatDto;
+
+    const { data, error } = await this.supabase
+      .from('chats')
+      .insert([{ is_group, name }])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+}
+```
+
+### 4. File Upload System
+
+The `uploads.service.ts` manages secure file uploads for messaging attachments:
+
+```typescript
+async uploadFile(file: Express.Multer.File, user_id: string, chat_id: string) {
+    const supabase = this.supabaseService.getClient();
+
+    const filePath = `uploads/${chat_id}/${Date.now()}-${file.originalname}`;
+
+    const { data, error } = await supabase.storage.from('uploads').upload(filePath, file.buffer, {
+      contentType: file.mimetype,
+    });
+
+    if (error) throw new Error(`Error al subir archivo: ${error.message}`);
+
+    const file_url = `${process.env.SUPABASE_URL}/storage/v1/object/public/uploads/${filePath}`;
+    const file_type = file.mimetype;
+
+    return this.saveFile({ user_id, chat_id, file_url, file_type });
+}
+```
+
+## Installation
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
+## Running the app
 
 ```bash
 # development
@@ -44,7 +166,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
+## Test
 
 ```bash
 # unit tests
@@ -57,42 +179,16 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Deployment
+## Environment Setup
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Create a `.env` file in the root directory with the following variables:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
 ```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_key
+PORT=3000
+```
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+FlowChat is an open-source project. If you'd like to support its development, consider contributing or donating.
