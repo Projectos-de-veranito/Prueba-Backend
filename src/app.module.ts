@@ -6,13 +6,11 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { ContactsModule } from './modules/contacts/contacts.module';
 import { MessagesModule } from './modules/messages/messages.module';
-import { NotificationsModule } from './modules/notifications/notifications.module';
-
+import { ChatsModule } from './modules/chats/chats.module';
 
 @Module({
   controllers: [AppController],
   providers: [AppService],
-  imports: [SupabaseModule, AuthModule, UsersModule, ContactsModule, MessagesModule, NotificationsModule],
+  imports: [SupabaseModule, AuthModule, UsersModule, ContactsModule, MessagesModule, ChatsModule],
 })
 export class AppModule {}
-

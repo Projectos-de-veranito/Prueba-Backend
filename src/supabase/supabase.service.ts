@@ -15,4 +15,19 @@ export class SupabaseService {
   getClient(): SupabaseClient {
     return this.supabase;
   }
+
+  async uploadFile(bucket: string, filePath: string, file: Buffer, contentType: string): Promise<string | null> {
+    const { data, error } = await this.supabase.storage.from(bucket).upload(filePath, file, {
+      contentType,
+      upsert: false,
+    });
+  
+    if (error) {
+      console.error("Error al subir archivo a Supabase:", error);
+      return null;
+    }
+  
+    return data?.path ? `${process.env.SUPABASE_URL}/storage/v1/object/public/${bucket}/${data.path}` : null;
+  }
+  
 }
