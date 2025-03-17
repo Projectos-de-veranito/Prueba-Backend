@@ -13,27 +13,23 @@ export class ChatsController {
     return this.chatsService.createChat(createChatDto);
   }
 
-  // Ruta para obtener un chat por ID
   @Get(':id')
   async getChatById(@Param('id') id: string) {
-    return this.chatsService.getChatsById(id); // Cambié el nombre del método a getChatsById
+    return this.chatsService.getChatsById(id);
   }
 
-  // Ruta para obtener todos los chats
   @Get()
   async getAllChats() {
     return this.chatsService.getAllChats();
   }
 
-  // Ruta para obtener los chats de un usuario específico
   @Get('user/:userId')
   async getChatsByUser(@Param('userId') userId: string) {
-    return this.chatsService.getChatsByUser(userId); // Este es el método para obtener chats por usuario
+    return this.chatsService.getChatsByUser(userId);
   }
 
   @Get(':chatId/messages')
   async getMessagesByChat(@Param('chatId') chatId: string) {
-    // Suponiendo que tienes un servicio para obtener los mensajes de un chat
     return this.chatsService.getMessagesByChat(chatId);
   }
 
@@ -53,13 +49,11 @@ export class ChatsController {
     return this.chatsService.addMember(addMemberDto);
   }
 
-  // Ruta para obtener los miembros de un chat
   @Get(':id/members')
   async getChatMembers(@Param('id') chat_id: string) {
     return this.chatsService.getChatMembers(chat_id);
   }
 
-  // Ruta para eliminar un miembro de un chat
   @Delete(':id/members/:user_id')
   async removeMember(@Param('id') chat_id: string, @Param('user_id') user_id: string) {
     return this.chatsService.removeMember(chat_id, user_id);

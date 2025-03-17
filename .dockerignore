@@ -1,0 +1,31 @@
+# Dependencias
+node_modules
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Compilado
+/dist
+/build
+
+# Git
+.git
+.gitignore
+
+# Archivos de entorno
+.env
+.env.*
+!.env.example
+
+# Tests
+/coverage
+/.nyc_output
+
+# Logs
+logs
+*.log
+
+# Editor y sistema
+.idea
+.vscode
+.DS_Store

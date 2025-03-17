@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { ChatsService } from '../chats/chats.service'; // Inyectamos el servicio de Chats
+import { ChatsService } from '../chats/chats.service';
 import { SupabaseService } from '../../supabase/supabase.service';
 
 @Module({

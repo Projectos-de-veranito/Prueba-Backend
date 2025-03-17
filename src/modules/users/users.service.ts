@@ -12,14 +12,16 @@
     }
 
     async createUser(createUserDto: CreateUserDto) {
-      const { email, username, avatar_url } = createUserDto;
-    
+      const { email, username } = createUserDto;
+      
+      const avatar_url = 'https://i.ibb.co/hRCDCFgs/perfil.png';
+      
       const { data, error } = await this.supabase
         .from('users')
         .insert([{ email, username, avatar_url }])
         .select()
         .single();
-    
+      
       if (error) throw error;
       return data;
     }

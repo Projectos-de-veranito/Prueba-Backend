@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Patch, Body, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ChatsService } from '../chats/chats.service'; // Asegúrate de importar ChatsService
+import { ChatsService } from '../chats/chats.service'; 
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -8,7 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService, 
-    private readonly chatsService: ChatsService // Asegúrate de inyectar ChatsService
+    private readonly chatsService: ChatsService 
   ) {}
 
   @Post()
@@ -23,7 +23,7 @@ export class UsersController {
 
   @Get(':id/chats')
   async getUserChats(@Param('id') id: string) {
-    return this.chatsService.getChatsByUser(id); // Llama al servicio de chats para obtener los chats del usuario
+    return this.chatsService.getChatsByUser(id); 
   }
 
   @Get(':id/contacts')

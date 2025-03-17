@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: build
+    command: npm run start:dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - SUPABASE_URL=https://spxfxrdhgtrtarrwebgf.supabase.co
+      - SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNweGZ4cmRoZ3RydGFycndlYmdmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5MjIzOTMsImV4cCI6MjA1NzQ5ODM5M30.K9lhs9uvahhc6ayQw1z8qdIf_XW1_VbZ91qIalYPb4M
+
+  # Si necesitas una base de datos local para desarrollo
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=nestjs_dev
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

@@ -12,7 +12,6 @@ export class ChatsService {
     this.supabase = this.supabaseService.getClient();
   }
 
-  // Crear un chat
   async createChat(createChatDto: CreateChatDto) {
     const { is_group, name } = createChatDto;
 
@@ -37,7 +36,6 @@ export class ChatsService {
   }
 
 
-  // Obtener los chats de un usuario
   async getChatsByUser(userId: string) {
     const { data, error } = await this.supabase
       .from('chat_members')
@@ -49,7 +47,6 @@ export class ChatsService {
     if (data && data.length > 0) {
       const chatIds = data.map((item) => item.chat_id);
 
-      // Recuperar los detalles de los chats
       const { data: chats, error: chatError } = await this.supabase
         .from('chats')
         .select('id, name, is_group')
@@ -59,10 +56,9 @@ export class ChatsService {
       return chats;
     }
 
-    return []; // Si no tiene chats, devuelve un array vacío
+    return [];
   }
 
-  // Obtener un chat por ID
   async getChatsById(id: string) {
     const { data, error } = await this.supabase
       .from('chats')
@@ -74,7 +70,6 @@ export class ChatsService {
     return data;
   }
 
-  // Obtener todos los chats
   async getAllChats() {
     const { data, error } = await this.supabase.from('chats').select('*');
 
@@ -82,7 +77,6 @@ export class ChatsService {
     return data;
   }
 
-  // Actualizar un chat
   async updateChat(id: string, updateChatDto: UpdateChatDto) {
     const { name } = updateChatDto;
 
@@ -97,7 +91,6 @@ export class ChatsService {
     return data;
   }
 
-  // Eliminar un chat
   async deleteChat(id: string) {
     await this.supabase.from('chat_members').delete().eq('chat_id', id);
 
@@ -107,7 +100,6 @@ export class ChatsService {
     return { message: 'Chat eliminado correctamente' };
   }
 
-  // Agregar un miembro a un chat
   async addMember(addMemberDto: AddMemberDto) {
     const { chat_id, user_id } = addMemberDto;
 
@@ -121,7 +113,6 @@ export class ChatsService {
     return data;
   }
 
-  // Obtener los miembros de un chat
   async getChatMembers(chat_id: string) {
     const { data, error } = await this.supabase
       .from('chat_members')
@@ -136,7 +127,6 @@ export class ChatsService {
     }));
   }
 
-  // Eliminar un miembro de un chat
   async removeMember(chat_id: string, user_id: string) {
     const { error } = await this.supabase
       .from('chat_members')

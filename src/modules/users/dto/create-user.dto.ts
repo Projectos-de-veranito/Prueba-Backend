@@ -10,5 +10,5 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
-  avatar_url?: string;
+  avatar_url?: string = 'https://i.ibb.co/hRCDCFgs/perfil.png';
 }

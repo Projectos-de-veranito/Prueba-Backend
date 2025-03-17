@@ -7,7 +7,7 @@ export class UploadsService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
   async uploadFile(file: Express.Multer.File, user_id: string, chat_id: string) {
-    const supabase = this.supabaseService.getClient(); // Obtener el cliente de Supabase
+    const supabase = this.supabaseService.getClient();
 
     const filePath = `uploads/${chat_id}/${Date.now()}-${file.originalname}`;
 
@@ -24,7 +24,7 @@ export class UploadsService {
   }
 
   async saveFile(uploadDto: AddUploadDto) {
-    const supabase = this.supabaseService.getClient(); // Obtener el cliente de Supabase
+    const supabase = this.supabaseService.getClient();
 
     const { data, error } = await supabase.from('uploads').insert([uploadDto]);
 
@@ -34,7 +34,7 @@ export class UploadsService {
   }
 
   async getFilesByChat(chat_id: string) {
-    const supabase = this.supabaseService.getClient(); // Obtener el cliente de Supabase
+    const supabase = this.supabaseService.getClient();
 
     const { data, error } = await supabase.from('uploads').select('*').eq('chat_id', chat_id);
 
